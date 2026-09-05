@@ -37,6 +37,11 @@ public class AccessChecker {
             if (accessorContext.equals("SAME_PACKAGE")) {
                 return "ALLOWED";
             }
+
+            if (accessorContext.equals("SUBCLASS_DIFFERENT_PACKAGE_OWN_TYPE")) {
+                return "ALLOWED";
+            }
+
             return "DENIED";
         }
 
@@ -54,7 +59,10 @@ public class AccessChecker {
 
         for (String[] attempt : attempts) {
 
-            String result = classifyAccess(attempt[0], attempt[1]);
+            String result = classifyAccess(
+                    attempt[0],
+                    attempt[1]
+            );
 
             if (result.equals("ALLOWED")) {
                 allowed++;
@@ -69,21 +77,35 @@ public class AccessChecker {
     public static void main(String[] args) {
 
         System.out.println(
-            classifyAccess("private", "SAME_CLASS")
+                classifyAccess("private", "SAME_CLASS")
         );
 
         System.out.println(
-            classifyAccess("protected", "DIFFERENT_PACKAGE")
+                classifyAccess("protected", "DIFFERENT_PACKAGE")
         );
 
         String[][] attempts = {
-            {"default", "SAME_PACKAGE"},
-            {"default", "DIFFERENT_PACKAGE"},
-            {"public", "DIFFERENT_PACKAGE"}
+                {"default", "SAME_PACKAGE"},
+                {"default", "DIFFERENT_PACKAGE"},
+                {"public", "DIFFERENT_PACKAGE"}
         };
 
         System.out.println(
-            summarizeBatch(attempts)
+                summarizeBatch(attempts)
+        );
+
+        System.out.println(
+                classifyAccess(
+                        "protected",
+                        "SUBCLASS_DIFFERENT_PACKAGE_OWN_TYPE"
+                )
+        );
+
+        System.out.println(
+                classifyAccess(
+                        "protected",
+                        "SUBCLASS_DIFFERENT_PACKAGE_PARENT_TYPE"
+                )
         );
     }
 }
